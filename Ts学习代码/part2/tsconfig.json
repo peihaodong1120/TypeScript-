@@ -1,0 +1,23 @@
+{
+ /*
+  tsconfig.json 是ts编译器的配置文件。ts编译器可以根据此文件的信息来对代码进行编译。
+
+  include :
+    用来指定哪些ts文件需要被编译
+    **  表示所有文件夹
+    *   表示所有文件
+    include:[路径1,路径2]
+
+  exclude : 不需要被编译的文件目录
+    默认值为 ["node_modules", "bower_components", "jspm_packages"]
+ */ 
+ 
+  // 根目录下，src文件下的所有文件夹下的所有文件都可以被编译 
+ "include": [
+   "./src/**/*"
+ ],
+  // 根目录下，src文件下的hello文件夹的hellow.ts不需要被编译
+ "exclude":[
+   "./src/hello/hello.ts"
+ ]
+}

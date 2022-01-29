@@ -194,16 +194,6 @@ function fnc2(a:number, b:number):number {
     let c:number
     c = a  // 不会报错 
     c = b	// 报错，unknow 不是 number类型
-    
-    // 可以使用类型断言, 告诉解析器该变量的实际类型
-    /*
-    语法：
-    	变量 = 变量 as 类型
-    	变量 = <类型>变量
-    */	
-    c = b as number 
-    c = <number>b
-    
     ```
 
 - void
@@ -279,4 +269,143 @@ function fnc2(a:number, b:number):number {
     console.log(fun);
     ```
 
-  - 
+- array
+
+  - 数组类型
+
+  - ```javascript
+    // 语法1  元素类型[]
+    let arr : string[]
+    arr = ['1', '2', '3']
+    // arr = [1, 2, 3] // 报错
+    
+    // 语法2  Array<元素类型>
+    let arr2: Array<number>
+    arr2 = [10, 20, 30] 
+    // arr2 = ['10', '20', '30'] // 报错
+    ```
+
+- tupie
+
+  - 元组，固定长度的数组
+
+  - ```javascript
+    // 元组tupie 固定长度的数组
+    // 语法 [类型，类型 ...]
+    // 定义了几个长度，就必须赋值几个长度，否则报错
+    let Arr: [string, number]
+    Arr = ['10',20]
+    Arr = ['10',20, 20] // 报错
+    
+    let Arr2: [number, number, string]
+    Arr2 = [10, 20, 'hello']
+    Arr2 = [10, 20] // 报错
+    ```
+
+- enum
+
+  - 枚举
+
+  - ```javascript
+    // enum 枚举类
+    // 语法  enum 枚举的类名{ 成员1, 成员2, 成员3 }
+    // 创建一个性别枚举
+    enum Gender{
+      man,
+      women
+    }
+    // sex的值为Gender枚举的值，man | women
+    let people:{name:string, sex:Gender}
+    // 设置的时候，只能设置Gender.man | Gender.man
+    people = {
+      name:'张三',
+      sex:Gender.man
+    }
+    // people = {
+    //   name:'张三',
+    //   sex:'man'  // 报错，不能将类型“string”分配给类型“Gender”。
+    // }
+    console.log('展示',people.sex === Gender.man);
+    
+    // 成员默认是从0开始
+    enum Color {Red, Green, Blue}
+    let colorName: string = Color[2];
+    console.log(colorName);  // 显示'Blue'因为上面代码里它的值是2
+    //也可手动赋值
+    enum ColorCopy {Red = 1, Green, Blue}
+    let colorNameCopy: string = ColorCopy[2];
+    console.log(colorNameCopy);  // 显示'Green'因为上面代码里它的值是2
+    ```
+
+- 其他语法
+
+  - & 且
+
+  - ```javascript
+    // 给obj赋值必须要满足 name属性是string和 age属性是number
+    let obj : {name:string} & {age:number}
+    obj = {
+      name:'張三',
+      age:20
+    }
+    // obj= {  // 报错， 缺少属性 "age"
+    //   name :'李四'
+    // }
+    ```
+
+  - 类型别别名
+
+  - ```javascript
+    // 语法: type 名字 = 类型
+    /*
+      有一个需求，变量 mm的类型为 10 | 20 | 30 | 40,
+      变量nn也一样是 10 | 20 | 30 | 40。
+      这里就可以使用类型别名
+    */ 
+    type myType = 10 | 20 | 30 | 40
+    let mm:myType
+    let nn:myType
+    mm = 10 
+    mm = 40 
+    mm = 50 // 报错,不能将类型“50”分配给类型“myType”
+    
+    nn = 20 
+    nn = 30 
+    nn = 0 // 报错,不能将类型“0”分配给类型“myType”
+    ```
+
+- 类型断言
+
+  - 有时候我们知道变量是什么类型，而编译器不知道。要通过*类型断言*这种方式可以告诉编译器变量的类型。
+
+  - ```javascript
+    /*
+    有两种形式
+    	 变量 as 类型
+    	 <类型>变量
+    */	
+    let b : unknow = '10'
+    let c : string
+    
+    c = b // 报错,因为b是unknow类型的不能赋值给string类型。
+    // 因为编译器不知道我们已经给unknow类型赋值了字符串。
+    // 所以我们要使用类型断言，让编译器知道变量的真正类型
+    c = b as string 
+    c = <string>b
+    ```
+
+#### 4、Ts的编译、以及配置项
+
+- 自动编译文件
+
+  - 编译文件时，使用-w指令，Ts比以前会自动监视文件的变化，并且在文件发生变化时对文件进行重新编译。
+
+    - ```
+      tsc xxx.ts -w
+      ```
+
+- 自动编译整个文件
+  - 在文件夹下创建一个tsconfig.json文件
+  - 在终端使用 **tsc** 命令，可以编译文件夹内所有的ts文件
+  - 使用 **tsc -w** 可以自动监视文件夹内所有的ts文件
+
