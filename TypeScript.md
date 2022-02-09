@@ -409,3 +409,4 @@ function fnc2(a:number, b:number):number {
   - 在终端使用 **tsc** 命令，可以编译文件夹内所有的ts文件
   - 使用 **tsc -w** 可以自动监视文件夹内所有的ts文件
 
+- tsconfig.json文件配置
