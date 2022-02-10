@@ -410,3 +410,29 @@ function fnc2(a:number, b:number):number {
   - 使用 **tsc -w** 可以自动监视文件夹内所有的ts文件
 
 - tsconfig.json文件配置
+
+  - include
+
+    - 定义希望被编译文件所在目录、
+
+    - 示例：
+
+      - ```json
+         "include": ["./src/**/*","./tests/**/*"],
+        ```
+
+      - 上述示例中，src和tests目录下的所有文件都会被编译
+
+  - exclude
+
+    - 定义编译需要排除在外的目录
+
+    - 默认值为 ["node_modules", "bower_components", "jspm_packages"]
+
+    - 示例
+
+      - ```json
+         "exclude":["./src/hello/**/*"],
+        ```
+
+      - 上述示例中，src下hello目录下的所有文件都不会被编译
