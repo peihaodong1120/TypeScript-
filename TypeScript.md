@@ -436,3 +436,51 @@ function fnc2(a:number, b:number):number {
         ```
 
       - 上述示例中，src下hello目录下的所有文件都不会被编译
+    
+  - compilerOptions
+
+    - 编译器的配置选项，对象模式。
+
+      - target
+        - 用来指定Ts被编译成的Es版本
+        - 默认 ES3
+        - 可编译选项'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'esnext'.
+      - module
+        - 指定要使用的模块化规范
+        - 可编译选项'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node12', 'nodenext
+      - lib
+        - 用来指定项目中使用的库,一般不需要配置这个选项
+      - outDir
+        - 指定编译后文件所在的目录
+      - outFile
+        - 将编译后的代码合并为一个js文件。设置outFile后,所有的全局作用域中的代码会合并到同一个文件
+      - allowJs
+        - 对js文件进行编译，默认false
+      - checkJs
+        - 检查js代码符合语法规范，默认false
+      - removeComments
+        - 编译后移除注释，默认false
+      - noEmit
+        - 不生成编译后文件，默认false
+      - noEmitOnError
+        - 编译时发现文件有错时不生成编译后文件，默认false
+
+    - 示例
+
+    - ```json
+       "compilerOptions": {
+        "target": "es5",
+        "module": "system",
+        "lib":[],
+        "outDir": "./dist",
+        "outFile": "./dist/app.js",
+        "allowJs": false,
+        "checkJs": false,
+        "removeComments": false,
+        "noEmit": false,
+        "noEmitOnError": false
+       }
+      ```
+
+      
+
