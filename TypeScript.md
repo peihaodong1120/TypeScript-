@@ -464,9 +464,19 @@ function fnc2(a:number, b:number):number {
         - 不生成编译后文件，默认false
       - noEmitOnError
         - 编译时发现文件有错时不生成编译后文件，默认false
-
+      - strict
+        - 所有严格检查的总开关。在开发时建议设置为true。
+      - alwaysStrict
+        - 用来设置编译后的文件是否使用严格模式 默认false
+      - noImplicitAny
+        - 不允许隐式的any类型
+      - noImplicitThis
+        -   不允许不明确类型的this
+      - strictNullChecks
+        -  严格检查空值
+    
     - 示例
-
+    
     - ```json
        "compilerOptions": {
         "target": "es5",
@@ -478,9 +488,14 @@ function fnc2(a:number, b:number):number {
         "checkJs": false,
         "removeComments": false,
         "noEmit": false,
-        "noEmitOnError": false
-       }
+        "noEmitOnError": false，
+        "strict": true,
+       "alwaysStrict": true,
+       "noImplicitAny": true,
+       "noImplicitThis": true,
+       "strictNullChecks": true
+      }
       ```
-
+      
       
 
