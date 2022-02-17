@@ -353,7 +353,7 @@ function fnc2(a:number, b:number):number {
     // }
     ```
 
-  - 类型别别名
+  - 类型别名
 
   - ```javascript
     // 语法: type 名字 = 类型
@@ -497,5 +497,27 @@ function fnc2(a:number, b:number):number {
       }
       ```
       
-      
+
+
+
+#### 5、使用webpack打包ts代码
+
+- 步骤：
+  1. 初始化项目
+     - 进入项目跟目录，执行命令`npm init -y`
+     - 主要作用是创建package.json文件
+  2. 下载构建工具
+     - `npm i -D webpack webpack-cli webpack-dev-server typescript ts-loader clean-webpack-plugin`
+     - webpack
+       - 构建工具webpack
+     - webpack-cli
+       - webpack的命令行工具
+     - webpack-dev-server
+       - webpack的开发服务器
+     - typeScript
+       - ts编译器
+     - ts-loader
+       - ts加载器，用于在webpack中编译ts文件
+     - clean-webpack-plugin
+       - webpack中的清除插件，每次构建都会先清除目录
 
