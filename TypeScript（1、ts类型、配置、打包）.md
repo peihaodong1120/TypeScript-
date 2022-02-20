@@ -506,18 +506,230 @@ function fnc2(a:number, b:number):number {
   1. 初始化项目
      - 进入项目跟目录，执行命令`npm init -y`
      - 主要作用是创建package.json文件
+     
   2. 下载构建工具
      - `npm i -D webpack webpack-cli webpack-dev-server typescript ts-loader clean-webpack-plugin`
-     - webpack
-       - 构建工具webpack
-     - webpack-cli
-       - webpack的命令行工具
-     - webpack-dev-server
-       - webpack的开发服务器
-     - typeScript
-       - ts编译器
-     - ts-loader
-       - ts加载器，用于在webpack中编译ts文件
-     - clean-webpack-plugin
-       - webpack中的清除插件，每次构建都会先清除目录
+     - **webpack：**构建工具webpack
+     - **webpack-cli：**webpack的命令行工具
+     - **webpack-dev-server**：webpack的开发服务器
+     - **typeScript：**ts编译器
+     - **ts-loader：**ts加载器，用于在webpack中编译ts文件
+     - **clean-webpack-plugin：**webpack中的清除插件，每次构建都会先清除目录
+
+  3. 根目录创建webpack的配置文件，webpack.config.js
+
+     - ```js
+       // 引入路径包
+       const path = require('path')
+       // 引入清理dist目录插件，该插件在每次编译的时候，会清理dist目录下的内容
+       const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+       // 引入html插件
+       const HtmlWebpackPlugin = require('html-webpack-plugin');
+       
+       module.exports = {
+         mode: 'development',
+         // 指定入口文件
+         entry:'./src/index.ts',
+         // 指定打包文件所在的目录
+         output:{
+           // 指定目录
+           path:path.resolve(__dirname, 'dist'),
+           // 指定文件名
+           filename: 'bundle.js',
+           environment:{
+             // 是否使用箭头函数
+             arrowFunction:true
+           }
+         },
+         // 指定webpack要打包时要使用的模块
+         module:{
+           // 指定要加载的规则
+           rules:[
+             {
+               // 指定生效的文件，以ts结尾的。
+               test: /\.ts$/,
+               // 要使用的loader
+               use: 'ts-loader'
+               // 打包忽略的文件
+               exclude:/node_modules/
+             }
+           ]
+         },
+         // 配置webpack插件
+         plugins:[
+           new CleanWebpackPlugin(),
+           // 自动生成一个html文件,并且以index.html为模板生成
+           new HtmlWebpackPlugin({ 
+             template:'./src/index.html'
+           }),
+         ],
+         resolve:{
+           // 用来设置引用模块,哪些文件需要引用
+           extensions: ['.js', '.json', '.ts'],
+         }
+       }
+       ```
+
+  4. 根目录下创建tsconfig.js
+
+     - ```js
+       {
+         "compilerOptions": {
+           "target": "es6",
+           "module": "es6",
+           "strict": true,
+         }
+       }
+       // 可以根据自己需要配置。
+       ```
+
+  5. 修改package.json添加如下配置
+
+     - ```json
+       // 添加scripts配置
+         "scripts": {
+           "test": "echo \"Error: no test specified\" && exit 1",
+           "build": "webpack",
+           "start": "webpack serve --open chrome.exe"
+         },
+       ```
+
+  6. Babel配置
+
+     - 经过一系列的配置，打包ts的基本配置已经完成，除了webpack，开发中还经常需要结合babel来对代码进行转换便于兼容更多浏览器
+
+     1. 安装依赖
+
+        - `npm i -D @babel/core @babel/preset-env babel-loader core-js`
+        - **@babel/core：**babel的核心工具
+        - **@babel/preset-env：**babel的预定义环境
+        - **babel-loader：**babel在webpack中的加载器
+        - **core-js:**用来使老版浏览器支持新版Es语法
+
+     2. 修改webpack.config.js 配置
+
+        - ```js
+          rules:[
+                {
+                  // 指定生效的文件，以ts结尾的。
+                  test: /\.ts$/,
+                  // 要使用的loader
+                  use: [
+                    // 配置loader
+                    {
+                      // 指定加载器
+                      loader:"babel-loader",
+                      // 设置babel
+                      options:{
+                        // 设置预定义环境
+                        presets:[
+                          [
+                            // 指定环境插件
+                            "@babel/preset-env",
+                            {
+                              // 要兼容的目标浏览器
+                              targets:{
+                                "chrome":"50"
+                              },
+                              // 指定corejs版本
+                              "corejs":"3",
+                              "useBuiltIns":"usage"
+          
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    'ts-loader'
+                  ],
+                  // 打包忽略的文件
+                  exclude:/node_modules/
+                }
+              ]
+          ```
+
+  7. 完整webpack配置
+
+     - ```js
+       // 引入html插件
+       const HtmlWebpackPlugin = require('html-webpack-plugin');
+       // 引入路径包
+       const path = require('path')
+       // 引入清理dist目录插件，该插件在每次编译的时候，会清理dist目录下的内容
+       const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+       
+       module.exports = {
+         mode: 'development',
+         // 指定入口文件
+         entry:'./src/index.ts',
+         // 指定打包文件所在的目录
+         optimization: {
+           // 关闭代码压缩，可选
+           minimize: false,
+         },
+         output:{
+           // 指定目录
+           path:path.resolve(__dirname, 'dist'),
+           // 指定文件名
+           filename: 'bundle.js',
+           environment:{
+             // 是否使用箭头函数
+             arrowFunction:true
+           }
+         },
+         // 指定webpack要打包时要使用的模块
+         module:{
+           // 指定要加载的规则
+           rules:[
+             {
+               // 指定生效的文件，以ts结尾的。
+               test: /\.ts$/,
+               // 要使用的loader
+               use: [
+                 // 配置loader
+                 {
+                   // 指定加载器
+                   loader:"babel-loader",
+                   // 设置babel
+                   options:{
+                     // 设置预定义环境
+                     presets:[
+                       [
+                         // 指定环境插件
+                         "@babel/preset-env",
+                         {
+                           // 要兼容的目标浏览器
+                           targets:{
+                             "chrome":"50"
+                           },
+                           // 指定corejs版本
+                           "corejs":"3",
+                           // 按需加载
+                           "useBuiltIns":"usage"
+                         }
+                       ]
+                     ]
+                   }
+                 },
+                 'ts-loader'
+               ],
+               // 打包忽略的文件
+               exclude:/node_modules/
+             }
+           ]
+         },
+         // 配置webpack插件
+         plugins:[
+           new CleanWebpackPlugin(),
+           // 自动生成一个html文件,并且以index.html为模板生成
+           new HtmlWebpackPlugin({ 
+             template:'./src/index.html'
+           }),
+         ],
+         resolve:{
+           // 用来设置引用模块,哪些文件需要引用
+           extensions: ['.js', '.json', '.ts'],
+         }
+       }
+       ```
 

@@ -10,11 +10,19 @@ module.exports = {
   // 指定入口文件
   entry:'./src/index.ts',
   // 指定打包文件所在的目录
+  optimization: {
+    // 关闭代码压缩，可选
+    minimize: false,
+  },
   output:{
     // 指定目录
     path:path.resolve(__dirname, 'dist'),
     // 指定文件名
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    environment:{
+      // 是否使用箭头函数
+      arrowFunction:true
+    }
   },
   // 指定webpack要打包时要使用的模块
   module:{
@@ -24,7 +32,35 @@ module.exports = {
         // 指定生效的文件，以ts结尾的。
         test: /\.ts$/,
         // 要使用的loader
-        use: 'ts-loader',
+        use: [
+          // 配置loader
+          {
+            // 指定加载器
+            loader:"babel-loader",
+            // 设置babel
+            options:{
+              // 设置预定义环境
+              presets:[
+                [
+                  // 指定环境插件
+                  "@babel/preset-env",
+                  {
+                    // 要兼容的目标浏览器
+                    targets:{
+                      "chrome":"50"
+                    },
+                    // 指定corejs版本
+                    "corejs":"3",
+                    // 按需加载
+                    "useBuiltIns":"usage"
+
+                  }
+                ]
+              ]
+            }
+          },
+          'ts-loader'
+        ],
         // 打包忽略的文件
         exclude:/node_modules/
       }
